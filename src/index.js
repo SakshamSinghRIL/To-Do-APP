@@ -3,30 +3,30 @@ import React from 'react';
 import './index.css'
 
 class AddTask extends React.Component {
-    constructor(props){
+    constructor(props) {
         super(props);
         this.state = {
             taskDesc: ''
         }
     }
-    handleTaskTextChange(e){
+    handleTaskTextChange(e) {
         this.setState({
             taskDesc: e.target.value
         })
     }
 
-    handleAddTaskClick(){
+    handleAddTaskClick() {
         this.props.handlerToCollectTaskInfo(this.state.taskDesc);
         this.setState({
             taskDesc: ''
         })
     }
 
-    render(){
-        return(
+    render() {
+        return (
             <form>
                 <input type="text" value={this.state.taskDesc} onChange={(e) => this.handleTaskTextChange(e)} />
-                <input type="button" value="Add Task" onClick={() => this.handleAddTaskClick()}/>
+                <input type="button" value="Add Task" onClick={() => this.handleAddTaskClick()} />
             </form>
         )
     }
@@ -34,18 +34,18 @@ class AddTask extends React.Component {
 
 class TaskList extends React.Component {
 
-   handleTaskClick(taskDesc){
+    handleTaskClick(taskDesc) {
         this.props.handlerToCollectTaskClickInfo(taskDesc);
-   }
+    }
 
-   render(){
+    render() {
         let list = [];
 
-        for(let i = 0; i < this.props.tasks.length; i++){
+        for (let i = 0; i < this.props.tasks.length; i++) {
             let task = this.props.tasks[i];
             let spanAction;
 
-            if(task.isFinished){
+            if (task.isFinished) {
                 spanAction = (
                     <span class="material-icons" onClick={() => this.handleTaskClick(task.desc)}>close</span>
                 );
@@ -64,7 +64,7 @@ class TaskList extends React.Component {
             list.push(listItem);
         }
 
-        return(
+        return (
             <div className={this.props.forStyling}>
                 <div className="list-container">
                     <div className='title'>{this.props.purpose}</div>
@@ -78,7 +78,7 @@ class TaskList extends React.Component {
 }
 
 class App extends React.Component {
-    constructor(props){
+    constructor(props) {
         super(props);
 
         this.state = {
@@ -98,7 +98,7 @@ class App extends React.Component {
         }
     }
 
-    handleNewTask(taskDesc){
+    handleNewTask(taskDesc) {
         let oldTasks = this.state.tasks.slice();
 
         oldTasks.push({
@@ -110,7 +110,7 @@ class App extends React.Component {
         })
     }
 
-    handleTaskStatusUpdate(taskDesc, newStatus){
+    handleTaskStatusUpdate(taskDesc, newStatus) {
         let oldTasks = this.state.tasks.slice();
 
         let taskItem = oldTasks.find(ot => ot.desc == taskDesc);
@@ -121,22 +121,22 @@ class App extends React.Component {
         })
     }
 
-    render(){
-       let tasks = this.state.tasks;
-       let todoTasks = tasks.filter(t => t.isFinished == false);
-       let doneTasks = tasks.filter(t => t.isFinished == true);
+    render() {
+        let tasks = this.state.tasks;
+        let todoTasks = tasks.filter(t => t.isFinished == false);
+        let doneTasks = tasks.filter(t => t.isFinished == true);
 
-       return (
-           <>
-              <div className="add-task">
-                <AddTask handlerToCollectTaskInfo={(taskDesc) => this.handleNewTask(taskDesc)}/>
-              </div>
-              <div className='task-lists'>
-                <TaskList handlerToCollectTaskClickInfo={(taskDesc) => this.handleTaskStatusUpdate(taskDesc, true)} tasks={todoTasks} purpose="Todo" forStyling="todo"/>
-                <TaskList handlerToCollectTaskClickInfo={(taskDesc) => this.handleTaskStatusUpdate(taskDesc, false)} tasks={doneTasks} purpose="Finished" forStyling="finished"/>
-              </div>
-           </>
-       );
+        return (
+            <>
+                <div className="add-task">
+                    <AddTask handlerToCollectTaskInfo={(taskDesc) => this.handleNewTask(taskDesc)} />
+                </div>
+                <div className='task-lists'>
+                    <TaskList handlerToCollectTaskClickInfo={(taskDesc) => this.handleTaskStatusUpdate(taskDesc, true)} tasks={todoTasks} purpose="Todo" forStyling="todo" />
+                    <TaskList handlerToCollectTaskClickInfo={(taskDesc) => this.handleTaskStatusUpdate(taskDesc, false)} tasks={doneTasks} purpose="Finished" forStyling="finished" />
+                </div>
+            </>
+        );
     }
 }
 
